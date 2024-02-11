@@ -80,15 +80,12 @@ let numGuessed = 0
 let passFlag = 0
 let badInput = `Please give me a proper response.`
 
-
-// grabs a random integer between the lowest and highest variable options
 function getRandomInt(min, max) {
     let minimum = Math.ceil(numLow);
     let maximum = Math.floor(numHigh);
     return Math.floor(Math.random() * (maximum - minimum + 1) + minimum);
 }
 
-// stops player declaring "No" when no more guesses are available and the computer won
 function cheatCatch() {
     if (numLow == guess && guess == numHigh) {
         console.log(`Before you said the number was higher than ${numLow - 1}, but lower than ${numHigh + 1}. That only leaves ${guess}! You're trying to cheat! I know I won: ${guess} is the right answer!`)
@@ -98,7 +95,6 @@ function cheatCatch() {
     }
 }
 
-// stops player from declaring answer is higher or lower than previously stated bookends
 function cheatCheck() {
     if (higherOrLower == `h` && guess >= numHigh) {
         if (guess == 10) {
@@ -132,7 +128,6 @@ let guess
 start();
 
 async function start() {
-    // let player declare high end for number range
     while (numHighD <= 1) {
         numHighD = await ask(`Please input a number greater than 1 to represent the max range for this game. `);
         if (numHighD <= 1) {
@@ -203,8 +198,6 @@ async function start() {
             };
 
             if (cheatCheck() == true) {
-                passFlag = 1;
-            } else if (higherOrLower != "h" || higherOrLower != "l") {
                 passFlag = 1;
             } else {
                 passFlag = 2;
