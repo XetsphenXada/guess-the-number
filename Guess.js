@@ -72,6 +72,7 @@ while (numGuessed < 1) {
 const readline = require('readline');
 const rl = readline.createInterface(process.stdin, process.stdout);
 
+let guess
 let higherOrLower
 let numLow = 1
 let numHighD = 0
@@ -127,8 +128,6 @@ function ask(questionText) {
     });
 }
 
-let guess
-
 start();
 
 async function start() {
@@ -142,7 +141,7 @@ async function start() {
         }
     }
 
-    console.log(`Let's play a game where you (human) pick a number between 1 and ${numHighD} and I (computer) try to guess it.`)
+    console.log(`Let's play a game where you (player) pick a number between 1 and ${numHighD} and I (computer) try to guess it.`)
     // let secretNumber = await ask("What is your secret number?\nI won't peek, I promise...\n");
     // console.log('You entered: ' + secretNumber);
     //Now try and complete the program.
@@ -150,8 +149,8 @@ async function start() {
     while (numGuessed < 1) {
         guess = getRandomInt(numLow, numHigh)
         let isCorrect
-        let arrYes = [`yes`, `y`]
-        let arrNo = [`no`, `n`]
+        let arrYes = [`yes`, `y`, `correct`, `c`]
+        let arrNo = [`no`, `n`, `incorrect`, `i`]
         let arrHigher = [`higher`, `high`, `h`]
         let arrLower = [`lower`, `low`, `l`]
 
