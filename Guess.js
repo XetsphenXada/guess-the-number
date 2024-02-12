@@ -79,8 +79,20 @@ let numHighD = 0
 let numHigh = 10
 let numGuessed = 0
 let passFlag = 0
+let guessCount = 0
 let badInput = `Please give me a proper response.`
+let isCorrect
+let arrYes = [`yes`, `y`, `correct`, `c`]
+let arrNo = [`no`, `n`, `incorrect`, `i`]
+let arrHigher = [`higher`, `high`, `h`]
+let arrLower = [`lower`, `low`, `l`]
 
+
+function getNarrowInt(min, max) {
+    let x = max - min
+    let y = x / 2
+    return parseInt(y);
+}
 
 // grabs a random integer between the lowest and highest variable options
 function getRandomInt(min, max) {
@@ -122,6 +134,16 @@ function cheatCheck() {
     }
 } 
 
+function notAcceptable() {
+    if (arrHigher.includes(higherOrLower)) {
+        return false
+    } else if (arrLower.includes(higherOrLower)) {
+        return false
+    } else {
+        return true
+    }
+}
+
 function ask(questionText) {
     return new Promise((resolve, reject) => {
         rl.question(questionText, resolve);
@@ -147,12 +169,16 @@ async function start() {
     //Now try and complete the program.
 
     while (numGuessed < 1) {
-        guess = getRandomInt(numLow, numHigh)
-        let isCorrect
-        let arrYes = [`yes`, `y`, `correct`, `c`]
-        let arrNo = [`no`, `n`, `incorrect`, `i`]
-        let arrHigher = [`higher`, `high`, `h`]
-        let arrLower = [`lower`, `low`, `l`]
+        console.log(numHigh - numLow)
+        if (getNarrowInt(numLow, numHigh) < numLow) {
+            guess = getRandomInt(numLow, numHigh)
+        } else if (getNarrowInt(numLow, numHigh) > numHigh) {
+            guess = getRandomInt(numLow, numHigh)
+        } else if (numHigh - numLow > 10) {
+            guess = getNarrowInt(numLow, numHigh)
+        } else {
+            guess = getRandomInt(numLow, numHigh)
+        }
 
         while (passFlag == 0) {
             isCorrect = await ask(`Is it ${guess}? Yes (Y) or No (N)? `);
@@ -170,11 +196,12 @@ async function start() {
                     console.log(badInput);
             };
         };
-    
 
         while (passFlag == 1) {
             if (isCorrect === `y`) {
-                console.log(`${guess} was correct!`)
+                guessCount += 1;
+                console.log(`${guess} was correct!`);
+                console.log(`Total Guesses: ${guessCount}`);
                 passFlag = 0;
                 numGuessed = 1;
             } else {
@@ -203,7 +230,7 @@ async function start() {
 
             if (cheatCheck() == true) {
                 passFlag = 1;
-            } else if (higherOrLower != "h" || higherOrLower != "l") {
+            } else if (notAcceptable()) {
                 passFlag = 1;
             } else {
                 passFlag = 2;
@@ -212,10 +239,12 @@ async function start() {
         
         while (passFlag == 2) {
             if (higherOrLower === `h`) {
+                guessCount += 1;
                 numLow = guess + 1;
                 passFlag = 0;
                 higherOrLower = null
             } else {
+                guessCount += 1;
                 numHigh = guess - 1;
                 passFlag = 0;
                 higherOrLower = null
